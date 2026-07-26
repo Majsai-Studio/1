@@ -274,19 +274,23 @@ section { position: relative; }
 /* --------------------------------------------------------------------------
    Hero — Landing
    -------------------------------------------------------------------------- */
-.hero {
+.heroscreen {
   min-height: 100svh;
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  padding: 118px var(--edge) var(--edge);
+}
+
+.heroscreen__top {
+  flex: 0 0 auto;
   text-align: center;
-  padding: 160px var(--edge) 80px;
+  padding-bottom: clamp(28px, 4vw, 56px);
 }
 
 .hero__eye {
-  width: 84px;
+  width: 64px;
   height: auto;
-  margin: 0 auto 36px;
+  margin: 0 auto 22px;
   opacity: 0;
   filter: drop-shadow(0 0 18px rgba(79, 227, 239, 0.35));
   animation: eyeIn 1.4s var(--ease) 0.15s forwards;
@@ -302,10 +306,10 @@ section { position: relative; }
 
 .h1 {
   font-weight: 800;
-  font-size: clamp(42px, 6.6vw, 96px);
+  font-size: clamp(36px, 5.2vw, 76px);
   line-height: 1.05;
   letter-spacing: -0.025em;
-  margin: 0 0 24px;
+  margin: 0 0 18px;
   opacity: 0;
   transform: translateY(16px);
   animation: rise 0.9s var(--ease) 0.5s forwards;
@@ -313,7 +317,7 @@ section { position: relative; }
 
 .h2 {
   font-weight: 500;
-  font-size: clamp(17px, 1.6vw, 22px);
+  font-size: clamp(16px, 1.5vw, 20px);
   line-height: 1.4;
   color: var(--ink-muted);
   max-width: 560px;
@@ -330,21 +334,20 @@ section { position: relative; }
 /* --------------------------------------------------------------------------
    Containers — Media / Webdesign entry points
    -------------------------------------------------------------------------- */
-.gate {
-  padding: 0 var(--edge) 120px;
-}
-
-.gate__grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+.gate__row {
+  flex: 1 1 auto;
+  display: flex;
+  gap: 12px;
+  min-height: 300px;
   max-width: 1240px;
+  width: 100%;
   margin: 0 auto;
 }
 
 .gate__card {
   position: relative;
-  height: 560px;
+  flex: 1 1 0;
+  min-width: 0;
   border-radius: 20px;
   overflow: hidden;
   border: 1px solid var(--hairline);
@@ -354,9 +357,13 @@ section { position: relative; }
   opacity: 0;
   transform: translateY(24px);
   animation: rise 0.8s var(--ease) forwards;
+  transition: flex-grow 0.75s var(--ease), border-color 0.4s var(--ease);
 }
 .gate__card:nth-child(1) { animation-delay: 0.15s; }
 .gate__card:nth-child(2) { animation-delay: 0.3s; }
+
+.gate__card:hover { flex-grow: 2.4; border-color: var(--cyan-dim); }
+.gate__row:has(.gate__card:hover) .gate__card:not(:hover) { flex-grow: 0.55; }
 
 .gate__card img {
   position: absolute;
@@ -423,7 +430,9 @@ section { position: relative; }
 }
 
 .gate__card:hover .gate__hover { max-height: 60px; opacity: 1; }
-.gate__card:hover { border-color: var(--cyan-dim); }
+
+.gate__card:hover .gate__title { transform: scale(1.04); }
+.gate__title { transition: transform 0.5s var(--ease); }
 
 .gate__arrow {
   display: inline-block;
@@ -432,8 +441,11 @@ section { position: relative; }
 .gate__card:hover .gate__arrow { transform: translateX(4px); }
 
 @media (max-width: 860px) {
-  .gate__grid { grid-template-columns: 1fr; }
-  .gate__card { height: 420px; }
+  .heroscreen { padding-top: 100px; }
+  .gate__row { flex-direction: column; }
+  .gate__card { flex: 1 1 auto; height: 260px; }
+  .gate__card:hover,
+  .gate__row:has(.gate__card:hover) .gate__card:not(:hover) { flex-grow: 1; }
 }
 
 /* --------------------------------------------------------------------------
