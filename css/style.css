@@ -146,7 +146,7 @@ section { position: relative; }
   letter-spacing: 0.02em;
 }
 
-.nav__brand img { height: 22px; width: auto; }
+.nav__brand img { height: 40px; width: auto; }
 
 .nav__brand b { color: var(--cyan); font-weight: 700; }
 
@@ -269,6 +269,17 @@ section { position: relative; }
   width: 22px;
   height: 1px;
   background: var(--cyan);
+}
+
+/* --------------------------------------------------------------------------
+   Micro-commitment tag question — a short, silently-agreeable prompt that
+   bridges sections and builds a small "yes" before the next beat.
+   -------------------------------------------------------------------------- */
+.microyes {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--cyan);
+  margin: 14px 0 0;
 }
 
 /* --------------------------------------------------------------------------
@@ -811,7 +822,7 @@ section { position: relative; }
   align-items: center;
   gap: 12px;
 }
-.footer__brand img { height: 26px; }
+.footer__brand img { height: 46px; }
 .footer__brand div b {
   display: block;
   font-size: 15px;
