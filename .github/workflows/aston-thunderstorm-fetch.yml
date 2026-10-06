@@ -1,0 +1,58 @@
+name: Aston Thunderstorm Asset Fetch
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  fetch-assets:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Sim Racer Tools Aston template pack
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p out
+          curl -L --fail --retry 4 --retry-delay 2 \
+            -A "Mozilla/5.0" \
+            "https://www.simracertools.com/wp-content/uploads/2026/04/Aston-Martin-Vantage-V8-GT3.zip" \
+            -o "out/Aston-Martin-Vantage-V8-GT3_SimRacerTools.zip"
+
+      - name: Download ACC livery viewer AMR model references
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p out/github_model
+          base="https://raw.githubusercontent.com/Blumlaut/acc-livery-viewer/main/models/amr_v8_vantage_gt3"
+          curl -L --fail --retry 4 "$base/amr_v8_vantage_gt3_exterior_Lod1.gltf" -o out/github_model/amr_v8_vantage_gt3_exterior_Lod1.gltf
+          curl -L --fail --retry 4 "$base/amr_v8_vantage_gt3_exterior_Lod1.bin" -o out/github_model/amr_v8_vantage_gt3_exterior_Lod1.bin
+          curl -L --fail --retry 4 "$base/amr_v8_vantage_gt3_exterior_sprint_Lod1.gltf" -o out/github_model/amr_v8_vantage_gt3_exterior_sprint_Lod1.gltf
+          curl -L --fail --retry 4 "$base/amr_v8_vantage_gt3_exterior_sprint_Lod1.bin" -o out/github_model/amr_v8_vantage_gt3_exterior_sprint_Lod1.bin
+
+      - name: Save source metadata
+        shell: bash
+        run: |
+          cat > out/SOURCES.txt <<'EOF'
+          Sim Racer Tools source page:
+          https://www.simracertools.com/docs/acc-custom-liveries-getting-started/
+          Direct template pack:
+          https://www.simracertools.com/wp-content/uploads/2026/04/Aston-Martin-Vantage-V8-GT3.zip
+
+          ACC livery viewer repository:
+          https://github.com/Blumlaut/acc-livery-viewer
+          Model path:
+          models/amr_v8_vantage_gt3/
+
+          OverTake AMR V8 Vantage GT3 2019 guide:
+          https://www.overtake.gg/downloads/guide-amr-v8-vantage-gt3-2019-livery-guides-wip.33114/
+          EOF
+          unzip -l out/Aston-Martin-Vantage-V8-GT3_SimRacerTools.zip > out/TEMPLATE_ZIP_CONTENTS.txt || true
+          find out -maxdepth 3 -type f -printf '%P\t%s bytes\n' | sort > out/INVENTORY.txt
+
+      - name: Upload fetched assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: aston-thunderstorm-source-assets
+          path: out/
+          if-no-files-found: error
+          retention-days: 1
